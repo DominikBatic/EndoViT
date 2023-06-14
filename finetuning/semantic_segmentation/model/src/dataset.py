@@ -8,9 +8,9 @@ from pathlib import Path
 import torch
 import sys
 
-segmentation_dir_path = str(Path(__file__).resolve().parent)
+segmentation_dir_path = "./finetuning/semantic_segmentation/model"
 sys.path.append(segmentation_dir_path)
-from custom_transforms import custom_RandomResizedCrop, custom_Resize, custom_RandomHorizontalFlip, custom_Normalize, custom_ToTensor
+from src.custom_transforms import custom_RandomResizedCrop, custom_Resize, custom_RandomHorizontalFlip, custom_Normalize, custom_ToTensor
 
 ########################################################################################################################
 ############################################# CholecSeg8k Dataset Class ################################################

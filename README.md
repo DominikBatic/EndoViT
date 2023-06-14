@@ -21,10 +21,10 @@ The development of novel Computer Vision (CV) methods in the medical field has b
 
 Consequently, public medical datasets are scarce, and the existing ones contain far fewer annotated images than the CV datasets used for the same task. Pre-training has been shown as a viable strategy to mitigate the downsides of training on small datasets. However, most medical works use models pre-trained on natural images, creating a domain gap between pre-training and fine-tuning.
 
-In this work, we explore the possibilities of pre-training models specifically for the use in endoscopic domain. To this end, we turn to Vision Transformers. Given the extreme number of parameters they contain, a large amount of data is needed to properly train them. Therefore, self-supervised pre-training strategies were developed, splitting the use of Transformers into two parts. First, a Transformer is pre-trained using a large collection of raw unlabelled data to produce a model with general understanding of the underlying domain. Afterwards, the resulting model is fine-tuned for a specific downstream task. This can now be done with significantly less labelled data.
+In this work, we explore the possibilities of pre-training models specifically for the use in endoscopic domain. To this end, we turn to Vision Transformers. Given the extreme number of parameters they contain, a large amount of data is needed to properly train them. Therefore, self-supervised pre-training strategies were developed, splitting the use of Transformers into two parts. First, a Transformer is pre-trained using a large collection of raw unlabelled data to produce a model with a general understanding of the underlying domain. Afterwards, the resulting model is fine-tuned for a specific downstream task. This can now be done with significantly less labelled data.
 
 ## Project Description
-The fact Vision Transformers can be pre-trained using raw data only prompted us to combine the existing smaller medical datasets into a larger collection. To this end, we introduce Endo700k, a collection of 9 publicly available endoscopic datasets comprising of more than 700,000 unlabelled images. The overview of the included datasets is given in the table below.
+The fact Vision Transformers can be pre-trained using raw data only prompted us to combine the existing smaller medical datasets into a larger collection. To this end, we introduce Endo700k, a collection of 9 publicly available endoscopic datasets comprising more than 700,000 unlabelled images. The overview of the included datasets is given in the table below.
 
 ### Endo700k dataset collection
 | # | Dataset                 | # Images  |
@@ -50,16 +50,16 @@ The fact Vision Transformers can be pre-trained using raw data only prompted us 
 [8]: http://ftp.itec.aau.at/datasets/GLENDA/v1_0/index.html
 [9]: http://ftp.itec.aau.at/datasets/SurgicalActions160/index.html
 
-Using Endo700k we pre-train a Vision Transformer model following [Masked Autoencoder (MAE)](https://github.com/facebookresearch/mae) approach. An input image is divided into equally-sized patches and a large proportion of them (75%) is masked out. The transformer is then tasked with reconstructing the missing input. Although a simple concept, it represents a challenging self-supervised tasked which induces a comprehensive understanding of observed objects and scenes. Afterwards, the pre-trained ViT model can be fine-tuned as a feature extraction backbone on various downstream tasks. We visualize the pre-training and fine-tuning procedure in the following image.
+Using Endo700k we pre-train a Vision Transformer model following [Masked Autoencoder (MAE)](https://github.com/facebookresearch/mae) approach. An input image is divided into equally-sized patches and a large proportion of them (75%) is masked out. The transformer is then tasked with reconstructing the missing input. Although a simple concept, it represents a challenging self-supervised task that induces a comprehensive understanding of observed objects and scenes. Afterwards, the pre-trained ViT model can be fine-tuned as a feature extraction backbone on various downstream tasks. We visualize the pre-training and fine-tuning procedure in the following image.
 
 <p align="center">
   <img src="assets/EndoViT.png" alt="EndoViT_model" width="85%">
 </p>
 
-Finally, we evaluated the EndoViT's performance on three downstream tasks:
-- Semantic Segmentation on CholecSeg8k dataset,
-- Action Triplet Detection on CholecT45 and
-- Surgical Phase Recognition on Cholec80.
+Finally, we evaluated EndoViT's performance on three downstream tasks:
+- Semantic Segmentation on the CholecSeg8k dataset,
+- Action Triplet Detection on the CholecT45 dataset and
+- Surgical Phase Recognition on the Cholec80 dataset.
 
 We primarily compare EndoViT's performance to its ImageNet pre-trained ViT counterpart.
 
@@ -91,8 +91,8 @@ python ./datasets/Cholec80/download_cholec80.py --data_rootdir ./datasets/
 
 **4) Download and Prepare the Other Datasets**
 - We have written a helper script to download and pre-process all other datasets. The following command will download and remove all unnecessary data except the raw images necessary for EndoViT pre-training. If you need the full datasets, please read the use instructions at the beginning of the script.
-- You will need at least 700 GB of memory to download the datasets, after pre-processing the dataset will be around 150 GB.
-- **To download HeiCo dataset, you need to first create a [Synapse Account](https://www.synapse.org/). Afterwards, pass your email and password as the arguments in the command below.**
+- You will need at least 700 GB of memory to download the datasets. After pre-processing, the dataset will be around 150 GB.
+- **To download HeiCo dataset, you need first to create a [Synapse Account](https://www.synapse.org/). Afterwards, pass your email and password as the arguments in the command below.**
 ```
 python ./datasets/Endo700k/download_and_prepare_Endo700k.py --all --synapse_email YOUR_EMAIL --synapse_password YOUR_PASSWORD
 ```
@@ -100,9 +100,9 @@ python ./datasets/Endo700k/download_and_prepare_Endo700k.py --all --synapse_emai
 -------------------
 ### Pre-train EndoViT: 
 -------------------
-- Since EndoViT is a collection of diverse datasets, we wanted to specialize our pre-training towards one of them. For this reason all our downstream tasks are conducted on Cholec80 data (CholecT45 and CholecSeg8k are subsets of Cholec80 with different annotations). 
-- On the other hand, to avoid data leakage, validation and test images of the downstream datasets had to be removed from the pre-training. Since Cholec80, CholecT45 and CholecSeg8k have different train/val/test splits, we decided to pre-train three different models: one for each task by removing validation and test images of the corresponding downstream dataset from EndoViT's Cholec80 section.
-- Additionally, we created a validation dataset consisting of only Cholec80 images. We frequently evaluate our pre-trained models on it and save the best performing ones. This implicitly assigns higher weight to Cholec80 images during pre-training.
+- Since EndoViT is a collection of diverse datasets, we wanted to specialize our pre-training towards one of them. For this reason, all our downstream tasks are conducted on the Cholec80 data (CholecT45 and CholecSeg8k are subsets of Cholec80 with different annotations). 
+- To avoid data leakage, validation and test images of the downstream datasets had to be removed from the pre-training. Since Cholec80, CholecT45 and CholecSeg8k have different train/val/test splits, we decided to pre-train three models: one for each task by removing validation and test images of the corresponding downstream dataset from EndoViT's Cholec80 section.
+- Additionally, we created a validation dataset consisting of only Cholec80 images. We frequently evaluate our pre-trained models on it and save the best-performing ones, which implicitly assigns a higher weight to the Cholec80 images during pre-training.
 
 **5) Prepare Cholec80**
 - The following script prepares three different subvariants of Cholec80. Each one will be used to pre-train EndoViT for different downstream task.
@@ -115,7 +115,7 @@ python ./datasets/Cholec80/prepare_cholec80.py
 - The validation dataset can now be found at: ```./datasets/validation_dataset/Cholec80_for_Validation```.
 
 **6) Download ImageNet Pre-trained Weights**
-- Endo700k's images were extracted at 1 FPS. Therefore, they aren't entirely independent, making the dataset in practice much smaller than it actually is.
+- Endo700k images were extracted at 1 FPS. Therefore, they aren't entirely independent, making the dataset in practice much smaller than it is.
 - Consequently, our pre-training uses ImageNet weights as a starting point.
 
 a) ImageNet weights for pre-training (encoder-decoder weights):
@@ -127,8 +127,8 @@ b) ImageNet weights for fine-tuning (encoder weights):
 wget -O ./pretraining/mae/ImageNet_pretrained_models/mae_pretrain_vit_base.pth https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_base.pth
 ```
 **7) Run the pre-training**
-- By default we use wandb for logging in all scripts. If you wish to use it as well, plase make a [WandB account](https://wandb.ai/site).
-- Afterwards, log into your wandb account in the current shell, or alternatively set WANDB_API_KEY shell variable as your wandb authorization key which you can find [here](https://wandb.ai/authorize).
+- By default, we use wandb for logging in all scripts. If you wish to use it as well, please make a [WandB account](https://wandb.ai/site).
+- Afterwards, log into your wandb account in the current shell, or alternatively, set WANDB_API_KEY shell variable as your wandb authorization key which you can find [here](https://wandb.ai/authorize).
 - You can disable the logging, but you will need to do so in each script.
 
 a) Run Pre-training for Semantic Segmentation
@@ -154,26 +154,26 @@ source ./pretraining/pretrained_endovit_models/EndoViT_for_SurgicalPhaseRecognit
 -------------------
 - As noted earlier, we fine-tune EndoViT on three downstream tasks: Semantic Segmentation, Action Triplet Detection and Surgical Phase Recognition.
 - On each task, we use a Vision Transformer (ViT) as a feature extraction backbone. We compare the results when the backbone was initialized with EndoViT weights (```EndoViT```), ImageNet weights (```ImageNet```) and when training from stratch (```NoPretraining```). Additionally, for Action Triplet Detection and Surgical Phase Reconition, we test the performance of a ResNet50 backbone pre-trained on ImageNet.
-- For each task, we first train all models with the full training dataset (```Full Dataset Experiments```). We then assess their performance when trained on a subset of the train set only (```Few-shot Learning Experiments```).
+- For each task, we first train all models with the full training dataset (```Full Dataset Experiments```). We then assess their performance when trained on only a subset of the train set (```Few-shot Learning Experiments```).
 - We always perform 3 runs for each model in each setting and report mean and standard deviation of the corresponding metric.
 
 ### Semantic Segmentation:
-- For this task we use [Dense Prediction Transformer (DPT)](https://github.com/isl-org/DPT) as the underlying architecture. It is an encoder-decoder model designed for dense-prediction tasks. However, instead of typically used CNN encoder, it uses the Vision Transformer as its encoder.
+- We use [Dense Prediction Transformer (DPT)](https://github.com/isl-org/DPT) as the underlying architecture for the task. It is an encoder-decoder model designed for dense prediction. However, it has a Vision Transformer encoder instead of the more standardly used CNN.
 
 **8) Download CholecSeg8k dataset (3 GB)**
 - First, download the dataset from Kaggle ([CholecSeg8k](https://www.kaggle.com/datasets/newslab/cholecseg8k?resource=download)). You will require a Kaggle account to do so.
-- After downloading, you will have a file named "archive.zip". Rename it to "CholecSeg8k.zip" and place it at "./datasets/CholecSeg8k".
+- After downloading, you will have a file named ```archive.zip```. Rename it to ```CholecSeg8k.zip``` and place it at ```./datasets/CholecSeg8k```.
 - Unzip the archive to ```./datasets/CholecSeg8k/data``` with the following command:
 ```
 unzip -uqq ./datasets/CholecSeg8k/CholecSeg8k.zip -d ./datasets/CholecSeg8k/data
 ```
 
 **9) Pre-process CholecSeg8k dataset**
-- We wrote a short description of CholecSeg8k structure [here](additional_README_files/CholecSeg8k.txt). We also discuss all the pre-processing details in it.
+- We wrote a short description of the CholecSeg8k structure [here](additional_README_files/CholecSeg8k.txt). We also discuss all the pre-processing details in it.
 - In short:
 a) We correct some mistakes in the dataset.
-b) Instead of using original watershed and color masks provided by CholecSeg8k, we create an additional "ground truth mask".
-c) In order to compare our results to other architectures, we follow the pre-processing and training procedure of this [benchmark](https://ieeexplore.ieee.org/document/9871583). Most importantly, we downsample the original 13 classes to 8 by combining several classes into one.
+b) Instead of using the original watershed and colour masks provided by CholecSeg8k, we create an additional "ground truth mask".
+c) To compare our results to other architectures, we follow the pre-processing and training procedure of this [benchmark](https://ieeexplore.ieee.org/document/9871583). Most importantly, we downsample the original 13 classes to 8 by combining several classes into one.
  
 - Pre-process CholecSeg8k by running:
 ```
@@ -199,18 +199,18 @@ python ./datasets/CholecSeg8k/utils/create_RP_file_for_CholecSeg8k.py \
 - On the Semantic Segmentation task, we tested both with lower resolution input and higher resolution input.
 - Each script will perform 3 runs on different seeds. We always use the same 3 fixed seeds: 1665, 8914 and 37.
 
-- To reproduce our results run the following scripts:
+- To reproduce our results, run the following scripts:
 
 a) Low Res - EndoViT's pre-training resolution (224 x 224)
 ```
 -------------- EndoViT -------------
-source ./finetuning/semantic_segmentation/output_dir/high_res/full_dataset/EndoViT/hyperparam_script
+source ./finetuning/semantic_segmentation/output_dir/low_res/full_dataset/EndoViT/hyperparam_script
 
 ------------- ImageNet -------------
-source ./finetuning/semantic_segmentation/output_dir/high_res/full_dataset/ImageNet/hyperparam_script
+source ./finetuning/semantic_segmentation/output_dir/low_res/full_dataset/ImageNet/hyperparam_script
 
 ----------- NoPretraining ----------
-source ./finetuning/semantic_segmentation/output_dir/high_res/full_dataset/NoPretraining/hyperparam_script
+source ./finetuning/semantic_segmentation/output_dir/low_res/full_dataset/NoPretraining/hyperparam_script
 ```
 
 b) High Res - resolution used in the benchmark paper (256 x 448)
@@ -238,10 +238,10 @@ source ./finetuning/semantic_segmentation/output_dir/high_res/full_dataset/NoPre
 </div>
 
 **12) Few-shot Learning Experiments**
-- Few-shot experiments are always performed by training on a fixed number of training videos. In the case of CholecSeg8k dataset on 1, 2 or 4 out of in total 13 training videos.
+- Few-shot experiments are always performed by training on a fixed number of training videos. In the case of CholecSeg8k dataset, on 1, 2 or 4 out of in total 13 training videos.
 - Each script will perform 3 runs on different video subsets. We always use the same fixed video subsets: [Few-shot Learning Subsets](./finetuning/semantic_segmentation/output_dir/LessTrainingData.txt)
 
-- To reproduce our results run the following scripts:
+- To reproduce our results, run the following scripts:
 
 a) Low Res - EndoViT's pre-training resolution (224 x 224)
 ```
@@ -305,7 +305,7 @@ source ./finetuning/semantic_segmentation/output_dir/high_res/less_training_data
 
 - Where ```Verb``` is the action performed using a surgical ```Instrument``` on a ```Target``` anatomical structure.
 
-- We build our code upon the [Rendezvous (RDV)](https://github.com/CAMMA-public/rendezvous/tree/main) model, designed specifically for the task. The task itself is described in more details in RDV repository.
+- We build our code upon the [Rendezvous (RDV)](https://github.com/CAMMA-public/rendezvous/tree/main) model, designed specifically for the task. The task itself is described in more detail in RDV repository.
 - In the end, we haven't successfully integrated ViT into RDV. Therefore, we test using a simple model consisting of a feature extraction backbone (either ResNet50 or ViT) and a single linear layer.
   
 **13) Download CholetT45 dataset (150 GB)**
@@ -316,7 +316,7 @@ source ./finetuning/semantic_segmentation/output_dir/high_res/less_training_data
 **14) Full Dataset Experiments**
 - Each script will perform 3 runs on different seeds. We always use the same 3 fixed seeds: 1665, 8914 and 37.
 
-- To reproduce our results run the following scripts:
+- To reproduce our results, run the following scripts:
 
 ```
 ##########  ViT Backbone  ##########
@@ -348,10 +348,10 @@ source ./finetuning/action_triplet_detection/output_dir/full_dataset/ResNet50_ba
 </div>
     
 **15) Few-shot Learning Experiments**
-- Few-shot experiments are always performed by training on a fixed number of training videos. In the case of CholecT45 dataset on 2, 4 or 8 out of in total 31 training videos.
+- Few-shot experiments are always performed by training on a fixed number of training videos. In the case of CholecT45 dataset, on 2, 4 or 8 out of in total 31 training videos.
 - Each script will perform 3 runs on different video subsets. We always use the same fixed video subsets: [Few-shot Learning Subsets](./finetuning/action_triplet_detection/output_dir/LessTrainingData.txt)
  
-- To reproduce our results run the following scripts:
+- To reproduce our results, run the following scripts:
 
 ```
 ##########  ViT Backbone  ##########
@@ -386,13 +386,13 @@ source ./finetuning/action_triplet_detection/output_dir/less_training_data/ResNe
 
 ### Surgical Phase Recognition:
 - Surgical Phase Recognition is a classification task in which a model takes a surgical video stream and labels each frame with the surgical phase it belongs to.
-- We build our code upon the [TeCNO](https://github.com/tobiascz/TeCNO) model. TeCNO employs a two-stage approach to perform Surgical Phase Recognition. In the first stage a simple model consisting of a feature extraction backbone and a single linear layer predicts phase labels by taking individual frames as input. Afterwards, a Multi-Stage Temporal Convolution Network (MS-TCN) refines the predictions using temporal context. The second stage is independent of the first, meaning MS-TCN can refine features of any backbone model.
-- We compare the performance of ViT and ResNet50 backbone.
+- We build our code upon the [TeCNO](https://github.com/tobiascz/TeCNO) model. TeCNO employs a two-stage approach to perform Surgical Phase Recognition. In the first stage, a simple model consisting of a feature extraction backbone and a single linear layer predicts phase labels by taking individual frames as input. Afterwards, a Multi-Stage Temporal Convolution Network (MS-TCN) refines the predictions using temporal context. The second stage is independent of the first, meaning MS-TCN can refine the predictions of any backbone network.
+- We compare the performance of the ViT and ResNet50 backbone.
 
 **16) Full Dataset Experiments**
 - Each script will perform 3 runs on different seeds. We always use the same 3 fixed seeds: 1665, 8914 and 37.
 
-- To reproduce our results run the following scripts:
+- To reproduce our results, run the following scripts:
 
 ```
 ##########  ViT Backbone  ##########
@@ -426,10 +426,10 @@ source ./finetuning/surgical_phase_recognition/output_dir/full_dataset/ResNet50_
 </div>
 
 **17) Few-shot Learning Experiments**
-- Few-shot experiments are always performed by training on a fixed number of training videos. In the case of Cholec80 dataset on 2, 4 or 8 out of in total 40 training videos.
+- Few-shot experiments are always performed by training on a fixed number of training videos. In the case of Cholec80 dataset, on 2, 4 or 8 out of in total 40 training videos.
 - Each script will perform 3 runs on different video subsets. We always use the same fixed video subsets: [Few-shot Learning Subsets](./finetuning/surgical_phase_recognition/output_dir/LessTrainingData.txt)
  
-- To reproduce our results run the following scripts:
+- To reproduce our results, run the following scripts:
 
 ```
 ##########  ViT Backbone  ##########

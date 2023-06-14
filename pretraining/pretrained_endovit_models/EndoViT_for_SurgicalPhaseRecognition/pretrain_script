@@ -17,8 +17,8 @@ OUT_DIR=./pretraining/pretrained_endovit_models/EndoViT_for_SurgicalPhaseRecogni
 SAVE_BEST_MODEL_AT=./pretraining/pretrained_endovit_models/EndoViT_for_SurgicalPhaseRecognition/endovit_SPR.pth
 WANDB_RUN_NAME=pretraining_for_SurgicalPhaseRecognition
 
-if [ ! -d ${OUTDIR} ] ; then
-	mkdir -p ${OUTDIR}
+if [ ! -d ${OUT_DIR} ] ; then
+	mkdir -p ${OUT_DIR}
 fi
 
 # set input paths

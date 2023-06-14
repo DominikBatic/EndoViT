@@ -1,6 +1,6 @@
 batch_size: 256
 model: mae_vit_base_patch16
-mask_ratio: 0.75 \
+mask_ratio: 0.75
 epochs: 15
 warmup_epochs: 1
 lr: 1.5e-3
@@ -11,7 +11,7 @@ validate_every_n_steps: 500
 seed: 1665
 log_every_n_steps: 10
 num_workers: 6
-resume: './pretraining/mae/ImageNet_pretrained_models/mae_pretrain_vit_base_full.pth' \
+resume: './pretraining/mae/ImageNet_pretrained_models/mae_pretrain_vit_base_full.pth'
 loss: MSE
 layer_decay: 0.75
 swa: True

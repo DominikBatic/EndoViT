@@ -48,14 +48,15 @@ class Cholec80FeatureExtract:
         self.df["all"] = pd.read_pickle(
             self.cholec_root_dir / "cholec_annotations_1fps.pkl")
 
-        #print("Drop nan rows from df manually")
-        ## Manually remove these indices as they are nan in the DF which causes issues
-        index_nan = [1983913, 900090]
-        #self.df["all"][self.df["all"].isna().any(axis=1)]
-        self.df["all"] = self.df["all"].drop(index_nan)
-        assert self.df["all"].isnull().sum().sum(
-        ) == 0, "Dataframe contains nan Elements"
-        self.df["all"] = self.df["all"].reset_index()
+        # REMOVED: when subsampling at 1 FPS these indices don't exist
+        ##print("Drop nan rows from df manually")
+        ### Manually remove these indices as they are nan in the DF which causes issues
+        #index_nan = [1983913, 900090]
+        ##self.df["all"][self.df["all"].isna().any(axis=1)]
+        #self.df["all"] = self.df["all"].drop(index_nan)
+        #assert self.df["all"].isnull().sum().sum(
+        #) == 0, "Dataframe contains nan Elements"
+        #self.df["all"] = self.df["all"].reset_index()
 
         self.vids_for_training = [i for i in range(1, 41)]
         self.vids_for_val = [i for i in range(41, 49)]

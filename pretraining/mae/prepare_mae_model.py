@@ -1,11 +1,8 @@
-from mae import models_vit
-from mae.util.pos_embed import interpolate_pos_embed
+import models_vit
+from util.pos_embed import interpolate_pos_embed
 from timm.models.layers import trunc_normal_
 import torch
-
-import os, sys
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-import mae.util.lr_decay as lrd
+import util.lr_decay as lrd
 
 """
 Constructs a list of MAE layers which will remain unfrozen:

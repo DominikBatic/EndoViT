@@ -11,7 +11,7 @@ import math
 import subprocess
 
 import os, sys
-segmentation_dir_path = str(Path(__file__).resolve().parent)
+segmentation_dir_path = "./finetuning/semantic_segmentation/model"
 sys.path.append(segmentation_dir_path)
 
 import torch.cuda.amp as amp

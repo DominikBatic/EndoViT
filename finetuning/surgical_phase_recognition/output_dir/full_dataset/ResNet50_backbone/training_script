@@ -25,7 +25,8 @@ if [ ! -d ${DIR} ] ; then
         mkdir -p ${DIR}
 fi
 
-python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/cnn/config/config_feature_extract.yml \
+python ./finetuning/surgical_phase_recognition/model/TeCNO/train.py \
+-c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/cnn/config/config_feature_extract.yml \
 --model_specific_batch_size_max 128 \
 --seed ${SEED} \
 --loss_balancing \
@@ -34,7 +35,8 @@ python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/c
 --wandb_tags FeatureExtraction FullDataset ResNet50 \
 --output_path ${DIR} 1> ${DIR}/fe_out.txt 2>${DIR}/fe_err.txt
 
-python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mstcn/config/config_tcn.yml \
+python ./finetuning/surgical_phase_recognition/model/TeCNO/train.py \
+-c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mstcn/config/config_tcn.yml \
 --data_root ${DIR}/*FeatureExtraction*/cholec80_pickle_export \
 --seed ${SEED} \
 --wandb_project_name "EndoViT_Finetuning_SurgicalPhaseRecognition" \

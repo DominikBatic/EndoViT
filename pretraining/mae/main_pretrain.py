@@ -193,7 +193,7 @@ def get_args_parser():
 
     parser.add_argument('--output_dir', default='./output_dir',
                         help='path where to save, empty for no saving')
-    parser.add_argument('--save_best_model_at', defaul='./output_dir/best.pth',
+    parser.add_argument('--save_best_model_at', default='./output_dir/best.pth',
                         help="""
                         Path where to save the best checkpoint. Use this variable if you wish to save
                         the best model at a specific location.

@@ -17,5 +17,5 @@ INDIR="./finetuning/semantic_segmentation/output_dir/low_res/full_dataset/EndoVi
 
 for CONFIG in "Run01_config_seed_1665.json" "Run02_config_seed_8914.json" "Run03_config_seed_37.json"
 do
-    python main.py -c $INDIR/$CONFIG
+    python ./finetuning/semantic_segmentation/model/main.py -c $INDIR/$CONFIG
 done

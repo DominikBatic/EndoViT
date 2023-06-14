@@ -40,7 +40,8 @@ else
     MIN_EPOCHS=10
 fi
 
-python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mae/config/config_feature_extract_mae.yml \
+python ./finetuning/surgical_phase_recognition/model/TeCNO/train.py \
+-c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mae/config/config_feature_extract_mae.yml \
 --mae_model "vit_base_patch16" \
 --mae_ckpt "./pretraining/pretrained_endovit_models/EndoViT_for_SurgicalPhaseRecognition/endovit_SPR.pth" \
 --learning_rate 0.0005 \
@@ -60,7 +61,8 @@ python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/m
 --wandb_tags FeatureExtraction ${video_count}VidsOnly ViT_backbone EndoViT \
 --output_path ${DIR} 1> ${DIR}/fe_out.txt 2>${DIR}/fe_err.txt
 
-python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mstcn/config/config_tcn.yml \
+python ./finetuning/surgical_phase_recognition/model/TeCNO/train.py \
+-c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mstcn/config/config_tcn.yml \
 --data_root ${DIR}/*FeatureExtraction*/cholec80_pickle_export \
 --seed ${SEED} \
 --wandb_project_name "EndoViT_Finetuning_SurgicalPhaseRecognition" \

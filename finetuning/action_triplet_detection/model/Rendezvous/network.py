@@ -41,9 +41,9 @@ import torch.nn.functional as F
 import torchvision.models as basemodels
 import torchvision.transforms as transforms
 
-import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))))
-from pretraining.mae.prepare_mae_model import prepare_mae_model
+import sys
+sys.path.append("./pretraining/mae")
+from prepare_mae_model import prepare_mae_model
 
 
 OUT_HEIGHT = 8

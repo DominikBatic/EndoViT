@@ -91,9 +91,9 @@ def main(args):
                 # RGB format like the rest of the dataset, this section corrects that
                 if (           open_img.mode != 'RGB' or
                     open_watershed_mask.mode != 'RGB' or
-                        open_annotation_mask != 'RGB' or
+                   open_annotation_mask.mode != 'RGB' or
                         open_color_mask.mode != 'RGB' ):
-                    print(f"{frame_path_str}, Mode: {open_img.mode} -- {open_watershed_mask.mode} -- {open_annotation_mask.mode} -- {open_color_mask.mode}")
+                    #print(f"{frame_path_str}, Mode: {open_img.mode} -- {open_watershed_mask.mode} -- {open_annotation_mask.mode} -- {open_color_mask.mode}")
                     with open(output_path / "incorrectly_saved_images.txt", mode="a") as err:
                         err.write(f"{frame_path_str}, Shapes: {open_img.mode} -- {open_watershed_mask.mode} -- {open_annotation_mask.mode} -- {open_color_mask.mode}\n")
                     

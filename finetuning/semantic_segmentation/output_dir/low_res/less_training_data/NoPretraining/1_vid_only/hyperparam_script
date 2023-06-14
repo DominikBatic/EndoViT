@@ -17,5 +17,5 @@ INDIR="./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/
 
 for CONFIG in "Run01_config_TrainData_09.json" "Run02_config_TrainData_28.json" "Run03_config_TrainData_43.json"
 do
-    python main.py -c $INDIR/$CONFIG
+    python ./finetuning/semantic_segmentation/model/main.py -c $INDIR/$CONFIG
 done

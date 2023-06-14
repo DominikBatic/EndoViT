@@ -17,8 +17,8 @@ OUT_DIR=./pretraining/pretrained_endovit_models/EndoViT_for_Segmentation/output
 SAVE_BEST_MODEL_AT=./pretraining/pretrained_endovit_models/EndoViT_for_Segmentation/endovit_seg.pth
 WANDB_RUN_NAME=pretraining_for_Segmentation
 
-if [ ! -d ${OUTDIR} ] ; then
-	mkdir -p ${OUTDIR}
+if [ ! -d ${OUT_DIR} ] ; then
+	mkdir -p ${OUT_DIR}
 fi
 
 # set input paths

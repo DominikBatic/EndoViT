@@ -36,7 +36,7 @@
 #
 #   For each frame, 4 separate .png files are saved.
 #   1) raw image (e.g. frame_80_endo.png)
-#   2) ground truth semantic segmentation mask <=> watershed_mask (e.g. frame_80_endo_watershed_mask.png)
+#   2) watershed_mask (e.g. frame_80_endo_watershed_mask.png)
 #   3) annotation mask (e.g. frame_80_endo_mask.png)
 #       - This mask was used by the annotation tool during the annotation process and can be ignored.
 #   4) color mask (e.g. frame_80_endo_color_mask.png)
@@ -44,7 +44,7 @@
 #       - In watershed masks each class was assigned 1 color, but Red, Green and Blue values of each of
 #         these colors are the same. (e.g. class 0 = color [127, 127, 127]).
 #       - On the other hand, in color masks each class was also assigned 1 color, but there is no
-#         restriction on RGB values. (e.g. class 0 = color [])
+#         restriction on RGB values. (e.g. class 3 = color [231,  70, 156])
 #       - The color mask is used for visualization purposes.
 #
 ####################################################################################################################
@@ -70,7 +70,7 @@
 #
 # 3) Incorrect color values:
 # -> While pre-processing the dataset we observed 2 errors:
-#    a) In the original dataset there should be 13 classes in total, which are represented by their own unique color_mask
+#    a) In the original dataset there should be 13 classes in total, which are represented by their own unique color
 #       in watershed and color masks. However, we have observed that some pixels have another 14th color. These pixels are
 #       colored black in watershed masks and white in color masks.
 #       
@@ -84,5 +84,8 @@
 #           "./datasets/CholecSeg8k/data/video37/video37_00848/frame_926_endo.png",
 #
 #       were color corrected by the authors. However, afterwards they were saved in RGBA instead of
-#       RGB format like the rest of the dataset, we correct that in the pre-processing.
+#       RGB format like the rest of the dataset, we correct that in the pre-processing. We save the
+#       paths of the incorrectly saved images at:
+#
+#       "./datasets/CholecSeg8k/data_preprocessed/incorrectly_saved_images.txt"
 #

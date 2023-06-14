@@ -8,8 +8,8 @@ import torch.nn.functional as F
 # get the MAE model code
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.parent.parent.parent.parent))
-from pretraining.mae.prepare_mae_model_seg_version import prepare_mae_model
+sys.path.append("./pretraining/mae")
+from prepare_mae_model_seg_version import prepare_mae_model
 
 
 activations = {}

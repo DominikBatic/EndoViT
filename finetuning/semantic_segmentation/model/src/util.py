@@ -6,8 +6,8 @@ import torch
 # get the CholecSeg8k color dict
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parent.parent.parent.parent.parent))
-import datasets.CholecSeg8k.utils.CholecSeg8k_color_dict_combined_classes as color_dict
+sys.path.append("./datasets/CholecSeg8k/utils")
+import CholecSeg8k_color_dict_combined_classes as color_dict
 
 #####################################################################
 ########################### Writing Utils ###########################

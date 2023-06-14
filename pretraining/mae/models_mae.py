@@ -16,10 +16,10 @@ import torch.nn as nn
 
 from timm.models.vision_transformer import PatchEmbed, Block
 
-from mae.util.pos_embed import get_2d_sincos_pos_embed
+from util.pos_embed import get_2d_sincos_pos_embed
 
 from torchmetrics import MultiScaleStructuralSimilarityIndexMeasure
-from mae.high_pass_filter import HighPassFilter
+from high_pass_filter import HighPassFilter
 
 
 class MaskedAutoencoderViT(nn.Module):

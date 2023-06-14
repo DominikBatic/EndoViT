@@ -58,8 +58,8 @@ import prettytable
 from contextlib import redirect_stdout, redirect_stderr
 
 # get an MAE model
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))))
-from pretraining.mae.prepare_mae_model import prepare_mae_model
+sys.path.append("./pretraining/mae")
+from prepare_mae_model import prepare_mae_model
 
 # get a ResNet model
 from simple_models import ResNet18_with_classifier_head, ResNet50_with_classifier_head

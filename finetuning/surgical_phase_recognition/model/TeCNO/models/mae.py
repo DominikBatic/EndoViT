@@ -7,10 +7,10 @@ from datetime import datetime
 
 import sys, os
 from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parent.parent.parent.parent.parent.parent))
-from pretraining.mae import models_vit
-from pretraining.mae.prepare_mae_model import prepare_mae_model
-from pretraining.mae.util.pos_embed import interpolate_pos_embed
+sys.path.append("./pretraining/mae")
+import models_vit
+from prepare_mae_model import prepare_mae_model
+from util.pos_embed import interpolate_pos_embed
 from timm.models.layers import trunc_normal_
 
 ### TWO HEAD MODELS ###
