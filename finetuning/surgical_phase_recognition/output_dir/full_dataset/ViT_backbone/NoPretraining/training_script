@@ -1,0 +1,53 @@
+#!/bin/sh
+#SBATCH --job-name=finetuning_SurgicalPhaseRecognition_FullDataset_NoPretraining
+#SBATCH --output=./finetuning/surgical_phase_recognition/output_dir/full_dataset/ViT_backbone/NoPretraining/out.txt # Standard output of the script (Can be absolute or relative path). %A adds the job id to the file name so you can launch the same script multiple times and get different logging files
+#SBATCH --error=./finetuning/surgical_phase_recognition/output_dir/full_dataset/ViT_backbone/NoPretraining/err.txt # Standard error of the script
+#SBATCH --time=0-48:00:00 # Limit on the total run time (format: days-hours:minutes:seconds)
+#SBATCH --gres=gpu:1 # Number of GPUs if needed
+#SBATCH --cpus-per-task=12 # Number of CPUs (Don't use more than 24 per GPU)
+#SBATCH --mem=100G # Memory in GB (Don't use more than 126G per GPU)
+
+# activate corresponding environment
+source ~/miniconda3/etc/profile.d/conda.sh
+conda deactivate
+conda activate endovit
+
+# run the program
+
+# set output paths
+OUTDIR="./finetuning/surgical_phase_recognition/output_dir/full_dataset/ViT_backbone/NoPretraining"
+
+for SEED in 1665 8914 37 
+do
+
+DIR=${OUTDIR}/seed_${SEED}
+if [ ! -d ${DIR} ] ; then
+        mkdir -p ${DIR}
+fi
+
+python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mae/config/config_feature_extract_mae.yml \
+--mae_model "vit_base_patch16" \
+--mae_ckpt "" \
+--learning_rate 0.0005 \
+--freeze_weights -1 \
+--mae_layer_decay 0.65 \
+--mae_weight_decay 0. \
+--mae_reinit_n_layers -1 \
+--return_mae_optimizer_groups \
+--model_specific_batch_size_max 128 \
+--seed ${SEED} \
+--loss_balancing \
+--wandb_project_name "EndoViT_Finetuning_SurgicalPhaseRecognition" \
+--wandb_name_suffix "FullDataset_NoPretraining_Seed_${SEED}" \
+--wandb_tags FeatureExtraction FullDataset NoPretraining \
+--output_path ${DIR} 1> ${DIR}/fe_out.txt 2>${DIR}/fe_err.txt
+
+python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mstcn/config/config_tcn.yml \
+--data_root ${DIR}/*FeatureExtraction*/cholec80_pickle_export \
+--seed ${SEED} \
+--wandb_project_name "EndoViT_Finetuning_SurgicalPhaseRecognition" \
+--wandb_name_suffix "FullDataset_NoPretraining_Seed_${SEED}" \
+--wandb_tags MSTCN FullDataset NoPretraining \
+--output_path ${DIR} 1> ${DIR}/tcn_out.txt 2>${DIR}/tcn_err.txt
+
+done

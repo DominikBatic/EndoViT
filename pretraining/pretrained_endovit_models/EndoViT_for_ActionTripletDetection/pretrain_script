@@ -1,0 +1,42 @@
+#!/bin/sh
+#SBATCH --job-name=pretraining_for_ActionTripletDetection
+#SBATCH --output=./pretraining/pretrained_endovit_models/EndoViT_for_ActionTripletDetection/output/out.txt # Standard output of the script (Can be absolute or relative path). %A adds the job id to the file name so you can launch the same script multiple times and get different logging files
+#SBATCH --error=./pretraining/pretrained_endovit_models/EndoViT_for_ActionTripletDetection/output/err.txt
+#SBATCH --time=0-96:00:00 # Limit on the total run time (format: days-hours:minutes:seconds)
+#SBATCH --gres=gpu:1 # Number of GPUs if needed
+#SBATCH --cpus-per-task=12 # Number of CPUs (Don't use more than 24 per GPU)
+#SBATCH --mem=120G # Memory in GB (Don't use more than 126G per GPU)
+
+# activate corresponding environment
+source ~/miniconda3/etc/profile.d/conda.sh
+conda deactivate
+conda activate endovit
+
+# set output paths
+OUT_DIR=./pretraining/pretrained_endovit_models/EndoViT_for_ActionTripletDetection/output
+SAVE_BEST_MODEL_AT=./pretraining/pretrained_endovit_models/EndoViT_for_ActionTripletDetection/endovit_ATD.pth
+WANDB_RUN_NAME=pretraining_for_ActionTripletDetection
+
+if [ ! -d ${OUTDIR} ] ; then
+	mkdir -p ${OUTDIR}
+fi
+
+# set input paths
+Endo700k_DIR=./datasets/Endo700k
+VALIDATION_DIR=./datasets/validation_dataset
+CONFIG_PATH=./pretraining/pretrained_endovit_models/pretraining_config.yml
+
+# if you don't want to use wandb remove the last 2 arguments below
+# NOTE: before using wandb you will have to log into wandb
+python ./pretraining/mae/main_pretrain.py \
+    --config ${CONFIG_PATH} \
+    --data_path ${Endo700k_DIR} \
+    --val_data_path ${VALIDATION_DIR} \
+    --train_datasets_to_take Cholec80_for_ActionTripletDetection DSAD ESAD GLENDA_v1.0 HeiCo hSDB-instrument LapGyn4_v1.2 PSI_AVA SurgicalActions160 \
+    --val_datasets_to_take Cholec80_for_Validation \
+    --output_dir ${OUT_DIR} \
+    --log_dir ${OUT_DIR}/tensorboard_logs \
+    --save_best_model_at ${SAVE_BEST_MODEL_AT} \
+    --use_wandb \
+    --wandb_run_name ${WANDB_RUN_NAME} \
+    1>${OUT_DIR}/out.txt 2>${OUT_DIR}/err.txt

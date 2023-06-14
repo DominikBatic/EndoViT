@@ -1,0 +1,54 @@
+batch_size: 256
+model: mae_vit_base_patch16
+mask_ratio: 0.75 \
+epochs: 15
+warmup_epochs: 1
+lr: 1.5e-3
+weight_decay: 0.05
+mean: '[0.3464, 0.2280, 0.2228]'
+std: '[0.2520, 0.2128, 0.2093]'
+validate_every_n_steps: 500
+seed: 1665
+log_every_n_steps: 10
+num_workers: 6
+resume: './pretraining/mae/ImageNet_pretrained_models/mae_pretrain_vit_base_full.pth' \
+loss: MSE
+layer_decay: 0.75
+swa: True
+swa_start: 10
+swa_average_every_n_steps: 500
+swa_lr: 4e-4
+
+# ----------------------------------------------------------------------------------------
+# SOME OTHER OPTIONS:
+# ----------------------------------------------------------------------------------------
+
+# NOTE: augmentations, re-init and other losses weren't improving results in our tests
+
+## turn on swa
+#    --swa \
+#    --swa_start 10 \
+#    --swa_average_every_n_steps 500 \
+#    --swa_lr 5.5e-5 \
+
+## turn on augmentations
+#    --rand_aug --reprob 0.25 --mixup 0.8 --cutmix 1.0 \
+# NOTE: mixup and cutmix are usually used for classification, 
+#       perhaps just turning on --rand_aug --reprob 0.25 would be better (this wasn't tested)
+
+## turn on LLRD
+#    --layer_decay 0.65 \
+
+## turn on re-init
+#    --reinit_n_layers 3 \
+
+## choose loss function
+#    --loss MSE \
+#    --loss l1 \
+#    --loss Mix \
+
+## turn on normalized pixel loss
+#    --norm_pix_loss \
+
+## turn on high pass filter loss
+#    --high_pass_filter_loss \

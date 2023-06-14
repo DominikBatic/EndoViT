@@ -1,0 +1,23 @@
+module : mae.feature_extraction.FeatureExtraction
+model : mae.TwoHeadMAEModel
+data_root : ./datasets
+dataset : cholec80_feature_extract_1FPS.Cholec80FeatureExtract
+out_features : 7
+input_height : 224
+input_width : 224
+batch_size : 1000
+fps_sampling : 1
+fps_sampling_test : 1
+learning_rate : 0.0005
+dataset_mode : img_multilabel
+early_stopping_metric : val_acc_phase
+save_top_k : 1
+max_epochs : 15 # 30
+min_epochs : 6 # 20
+num_tasks : 2
+num_sanity_val_steps : 4
+test_extract : True
+#accelerator: ddp_spawn
+num_workers : 12
+gpus : -1 # all available -1
+#resume_from_checkpoint : logs/201103-000243_FeatureExtraction_Cholec80FeatureExtract_cnn_TwoHeadResNet50Model/checkpoints/201103-000243_FeatureExtraction_Cholec80FeatureExtract_cnn_TwoHeadResNet50Model-epoch=10-val_acc_phase=0.83.ckpt

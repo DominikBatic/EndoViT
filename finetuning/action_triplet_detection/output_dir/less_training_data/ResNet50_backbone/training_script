@@ -1,0 +1,76 @@
+#!/bin/sh
+#SBATCH --job-name=finetuning_ActionTripletDetection_LessTrainingData_ResNet50
+#SBATCH --output=./finetuning/action_triplet_detection/output_dir/less_training_data/ResNet50_backbone/out.txt # Standard output of the script (Can be absolute or relative path). %A adds the job id to the file name so you can launch the same script multiple times and get different logging files
+#SBATCH --error=./finetuning/action_triplet_detection/output_dir/less_training_data/ResNet50_backbone/err.txt # Standard error of the script
+#SBATCH --time=0-48:00:00 # Limit on the total run time (format: days-hours:minutes:seconds)
+#SBATCH --gres=gpu:1 # Number of GPUs if needed
+#SBATCH --cpus-per-task=12 # Number of CPUs (Don't use more than 24 per GPU)
+#SBATCH --mem=120G # Memory in GB (Don't use more than 126G per GPU)
+
+# activate corresponding environment
+source ~/miniconda3/etc/profile.d/conda.sh
+conda deactivate
+conda activate endovit
+
+# run the program
+
+# hyperparameters
+SEED=1665
+lr=0.0001
+wd=0.00001
+
+# set output paths
+OUT_DIR="./finetuning/action_triplet_detection/output_dir/less_training_data/ResNet50_backbone"
+
+# set input paths
+DATA_DIR="./datasets/CholecT45"
+
+for VIDEOS_TO_USE in "27 5" "70 47" "51 50" "36 14 57 15" "23 66 31 27" "42 31 6 52" "18 57 51 60 27 68 36 48" "2 36 5 47 48 8 6 18" "47 57 8 80 15 68 40 27"
+do
+
+video_count=$(echo ${VIDEOS_TO_USE} | wc -w)
+video_str=$(echo ${VIDEOS_TO_USE} | tr " " "_")
+
+DIR=${OUT_DIR}/${video_count}_videos_only
+if [ ! -d ${DIR} ] ; then
+	mkdir -p ${DIR}
+fi
+
+if [ ${video_count} -eq 2 ]; then
+    EPOCHS=50
+elif [ ${video_count} -eq 4 ]; then
+    EPOCHS=30
+else
+    EPOCHS=20
+fi
+
+# set run name (this will be the output dir inside DIR)
+RUN_NAME=${video_count}VidsOnly_ResNet50_Videos_${video_str}
+
+python ./finetuning/action_triplet_detection/model/Rendezvous/run_training_focal_loss.py \
+    -t -e \
+    --data_dir=${DATA_DIR} \
+    --dataset_variant=cholect45-crossval \
+    --kfold 5 \
+    --image_height 224 \
+    --image_width 224 \
+    --backbone resnet50 \
+    --epochs ${EPOCHS} \
+    --batch 32 \
+    --initial_learning_rates ${lr} \
+    --warmups 0 \
+    --decay_rate 0.95 \
+    --version ${RUN_NAME} \
+    --weight_decay ${wd} \
+    --output_dir ${DIR} \
+    --dataset_mean "[0.3464, 0.2280, 0.2228]" \
+    --dataset_std "[0.2520, 0.2128, 0.2093]" \
+    --use_wandb \
+    --wandb_project_name "EndoViT_Finetuning_ActionTripletDetection" \
+    --wandb_tags LessTrainingData ResNet50 ${video_count}VidsOnly \
+    --seed ${SEED} \
+    --num_workers 12 \
+    --loss_weighting "no_weighting" \
+    --data_efficient_training ${VIDEOS_TO_USE}
+
+done

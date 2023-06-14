@@ -1,0 +1,27 @@
+############# Full Dataset Experiments #############
+
+------------- EndoViT -------------
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/full_dataset/EndoViT/hyperparam_script
+
+------------- ImageNet -------------
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/full_dataset/ImageNet/hyperparam_script
+
+------------- NoPretraining -------------
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/full_dataset/NoPretraining/hyperparam_script
+
+############# Few-shot Learning Experiments #############
+
+------------- EndoViT -------------
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/EndoViT/1_vid_only/hyperparam_script
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/EndoViT/2_vids_only/hyperparam_script
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/EndoViT/4_vids_only/hyperparam_script
+
+------------- ImageNet -------------
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/ImageNet/1_vid_only/hyperparam_script
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/ImageNet/2_vids_only/hyperparam_script
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/ImageNet/4_vids_only/hyperparam_script
+
+------------- NoPretraining -------------
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/NoPretraining/1_vid_only/hyperparam_script
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/NoPretraining/2_vids_only/hyperparam_script
+sbatch ./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/NoPretraining/4_vids_only/hyperparam_script

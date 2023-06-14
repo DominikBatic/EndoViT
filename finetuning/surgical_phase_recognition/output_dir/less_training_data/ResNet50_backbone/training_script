@@ -1,0 +1,63 @@
+#!/bin/sh
+#SBATCH --job-name=finetuning_SurgicalPhaseRecognition_LessTrainingData_ResNet50
+#SBATCH --output=./finetuning/surgical_phase_recognition/output_dir/less_training_data/ResNet50_backbone/out.txt # Standard output of the script (Can be absolute or relative path). %A adds the job id to the file name so you can launch the same script multiple times and get different logging files
+#SBATCH --error=./finetuning/surgical_phase_recognition/output_dir/less_training_data/ResNet50_backbone/err.txt # Standard error of the script
+#SBATCH --time=0-48:00:00 # Limit on the total run time (format: days-hours:minutes:seconds)
+#SBATCH --gres=gpu:1 # Number of GPUs if needed
+#SBATCH --cpus-per-task=12 # Number of CPUs (Don't use more than 24 per GPU)
+#SBATCH --mem=100G # Memory in GB (Don't use more than 126G per GPU)
+
+# activate corresponding environment
+source ~/miniconda3/etc/profile.d/conda.sh
+conda deactivate
+conda activate endovit
+
+# run the program
+
+# set output paths
+OUTDIR="./finetuning/surgical_phase_recognition/output_dir/less_training_data/ResNet50_backbone"
+SEED=1665
+
+for VIDEOS_TO_USE in "25 1" "33 11" "22 40" "8 28 13 4" "5 17 25 31" "24 28 38 15" "1 22 12 8 6 33 31 29" "20 38 25 7 29 4 2 24" "18 28 17 2 40 36 7 34"
+do
+
+video_count=$(echo ${VIDEOS_TO_USE} | wc -w)
+video_str=$(echo ${VIDEOS_TO_USE} | tr " " "_")
+
+DIR=${OUTDIR}/${video_count}_videos_only/videos_${video_str}
+if [ ! -d ${DIR} ] ; then
+	mkdir -p ${DIR}
+fi
+
+if [ ${video_count} -eq 2 ]; then
+    MAX_EPOCHS=80
+    MIN_EPOCHS=40
+elif [ ${video_count} -eq 4 ]; then
+    MAX_EPOCHS=60
+    MIN_EPOCHS=20
+else
+    MAX_EPOCHS=40
+    MIN_EPOCHS=10
+fi
+
+python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/cnn/config/config_feature_extract.yml \
+--model_specific_batch_size_max 128 \
+--seed ${SEED} \
+--loss_balancing \
+--data_efficient_training ${VIDEOS_TO_USE} \
+--max_epochs ${MAX_EPOCHS} \
+--min_epochs ${MIN_EPOCHS} \
+--wandb_project_name "EndoViT_Finetuning_SurgicalPhaseRecognition" \
+--wandb_name_suffix "${video_count}VidsOnly_ResNet50_Videos_${video_str}" \
+--wandb_tags FeatureExtraction ${video_count}VidsOnly ResNet50 \
+--output_path ${DIR} 1> ${DIR}/fe_out.txt 2>${DIR}/fe_err.txt
+
+python train.py -c ./finetuning/surgical_phase_recognition/model/TeCNO/modules/mstcn/config/config_tcn.yml \
+--data_root ${DIR}/*FeatureExtraction*/cholec80_pickle_export \
+--seed ${SEED} \
+--wandb_project_name "EndoViT_Finetuning_SurgicalPhaseRecognition" \
+--wandb_name_suffix "${video_count}VidsOnly_ResNet50_Videos_${video_str}" \
+--wandb_tags MSTCN ${video_count}VidsOnly ResNet50 \
+--output_path ${DIR} 1> ${DIR}/tcn_out.txt 2>${DIR}/tcn_err.txt
+
+done

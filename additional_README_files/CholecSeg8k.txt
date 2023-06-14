@@ -1,0 +1,88 @@
+# CholecSeg8k description:
+#
+# STRUCTURE
+#
+#   CholecSeg8k
+#   ├── video01 # 1st level
+#   │   ├── video01_00080 # 2nd level
+#   │   │   ├── frame_80_endo.png                        # raw_image
+#   │   │   ├── frame_80_endo_watershed_mask.png         # ground truth semantic segmentation
+#   │   │   ├── frame_80_endo_mask.png                   # annotation mask
+#   │   │   ├── frame_80_endo_color_mask.png             # color mask
+#   │   │   ├── ...
+#   │   │   ├──
+#   │   │   ├── frame_159_endo.png
+#   │   │   ├── frame_159_endo_watershed_mask.png
+#   │   │   ├── frame_159_endo_mask.png
+#   │   │   └── frame_159_endo_color_mask.png
+#   │   ├── ...
+#   │   └── video01_00080
+#   ├── ...
+#   └── video55
+#
+#
+# The dataset has 2 level directory structure:
+#   -> 1st level: 
+#       - Represents Cholec80 videos (CholecSeg8k contains 17 out of 80 Cholec80 videos)
+#   -> 2nd level:
+#       - Each directory is a video clip of 80 consequtive frames from the corresponding video.
+#       - The naming convention is {video_name}_{starting_frame_number}, 
+#         e.g. if the name is video01_00080, then this directory 
+#         contains frames 80 - 159 from video01 of Cholec80 dataset.
+#
+#
+# NOTE:
+#   The dataset contains 13 classes in total, including class 0 - background.
+#
+#   For each frame, 4 separate .png files are saved.
+#   1) raw image (e.g. frame_80_endo.png)
+#   2) ground truth semantic segmentation mask <=> watershed_mask (e.g. frame_80_endo_watershed_mask.png)
+#   3) annotation mask (e.g. frame_80_endo_mask.png)
+#       - This mask was used by the annotation tool during the annotation process and can be ignored.
+#   4) color mask (e.g. frame_80_endo_color_mask.png)
+#       - This mask is equivallent to the watershed mask but color values for each class are different.
+#       - In watershed masks each class was assigned 1 color, but Red, Green and Blue values of each of
+#         these colors are the same. (e.g. class 0 = color [127, 127, 127]).
+#       - On the other hand, in color masks each class was also assigned 1 color, but there is no
+#         restriction on RGB values. (e.g. class 0 = color [])
+#       - The color mask is used for visualization purposes.
+#
+####################################################################################################################
+#
+# How do we pre-process the dataset?
+#
+# 1) Creating our own ground truth masks
+# -> For each image we create an additional "ground truth segmentation mask".
+# -> Watershed and color masks aren't convenient to use.
+# -> Instead, for each image, we create an additional RGB image, where each pixel is represented by it's class value.
+#    For example, if our .png image is of shape [3, 224, 224] and pixel [0, 0] belongs to class 5, then
+#    [:, 0, 0] = [5, 5, 5], i.e. the pixel's RGB color values are its class repeated 3 times.
+# -> We save the image as .png file (e.g. for image "frame_80_endo.png" we create "frame_80_endo_gt_mask.png").
+#
+# 2) We compare our results to the benchmark introduced here: https://ieeexplore.ieee.org/document/9871583
+# -> Therefore, we pre-process Cholec80 and train our models as close as possible to what they describe in the paper.
+# -> Most importantly, they combine several classes that appear rarely in the dataset into one bigger class, as
+#    well as combine the only 2 instrument classes into one class.
+# -> In the end instead of 13 classes we end up with 8.
+# -> We have created dictionaries that map original watershed_mask color values to the new classes in:
+#    ./utils/CholecSeg8k_color_dict.py (original 13 class mapping) and
+#    ./utils/CholecSeg8k_color_dict_combined_classes.py (mapping after combining classes).
+#
+# 3) Incorrect color values:
+# -> While pre-processing the dataset we observed 2 errors:
+#    a) In the original dataset there should be 13 classes in total, which are represented by their own unique color_mask
+#       in watershed and color masks. However, we have observed that some pixels have another 14th color. These pixels are
+#       colored black in watershed masks and white in color masks.
+#       
+#       SOLUTION: You will notice in the mapping dictionaries that we included another 14th class, however when calculating
+#                 the loss and metric values during training we use the "ignore_index" option to ignore these pixels.
+#
+#    b) Watershed and color masks of 4 images, namely:
+#           "./datasets/CholecSeg8k/data/video18/video18_01139/frame_1216_endo.png",
+#           "./datasets/CholecSeg8k/data/video35/video35_00780/frame_858_endo.png",
+#           "./datasets/CholecSeg8k/data/video37/video37_00848/frame_865_endo.png",
+#           "./datasets/CholecSeg8k/data/video37/video37_00848/frame_926_endo.png",
+#
+#       were color corrected by the authors. However, afterwards they were saved in RGBA instead of
+#       RGB format like the rest of the dataset, we correct that in the pre-processing.
+#

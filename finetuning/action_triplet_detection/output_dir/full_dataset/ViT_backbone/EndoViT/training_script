@@ -1,0 +1,74 @@
+#!/bin/sh
+#SBATCH --job-name=finetuning_ActionTripletDetection_FullDataset_EndoViT
+#SBATCH --output=./finetuning/action_triplet_detection/output_dir/full_dataset/ViT_backbone/EndoViT/out.txt # Standard output of the script (Can be absolute or relative path). %A adds the job id to the file name so you can launch the same script multiple times and get different logging files
+#SBATCH --error=./finetuning/action_triplet_detection/output_dir/full_dataset/ViT_backbone/EndoViT/err.txt # Standard error of the script
+#SBATCH --time=0-48:00:00 # Limit on the total run time (format: days-hours:minutes:seconds)
+#SBATCH --gres=gpu:1 # Number of GPUs if needed
+#SBATCH --cpus-per-task=12 # Number of CPUs (Don't use more than 24 per GPU)
+#SBATCH --mem=120G # Memory in GB (Don't use more than 126G per GPU)
+
+# activate corresponding environment
+source ~/miniconda3/etc/profile.d/conda.sh
+conda deactivate
+conda activate endovit
+
+# run the program
+
+# hyperparameters
+EPOCHS=10
+REINIT=-1
+LLRD=0.65
+lr=0.001
+wd=0.05
+freeze=-1
+
+# set output paths
+OUT_DIR="./finetuning/action_triplet_detection/output_dir/full_dataset/ViT_backbone/EndoViT"
+
+if [ ! -d ${OUT_DIR} ] ; then
+	mkdir -p ${OUT_DIR}
+fi
+
+# set input paths
+DATA_DIR="./datasets/CholecT45"
+VIT_PRETRAINED_CKPT="./pretraining/pretrained_endovit_models/EndoViT_for_ActionTripletDetection/endovit_ATD.pth"
+
+for SEED in 1665 8914 37 
+do
+
+# set run name (this will be the output dir inside OUT_DIR)
+RUN_NAME=FullDataset_EndoViT_Seed_${SEED}
+
+python ./finetuning/action_triplet_detection/model/Rendezvous/run_training_focal_loss.py \
+    -t -e \
+    --data_dir=${DATA_DIR} \
+    --dataset_variant=cholect45-crossval \
+    --kfold 5 \
+    --image_height 224 \
+    --image_width 224 \
+    --backbone mae \
+    --epochs ${EPOCHS} \
+    --batch 32 \
+    --initial_learning_rates ${lr} \
+    --warmups 0 \
+    --decay_rate 0.95 \
+    --version ${RUN_NAME} \
+    --mae_model "vit_base_patch16" \
+    --mae_ckpt ${VIT_PRETRAINED_CKPT} \
+    --nb_classes 100 \
+    --freeze_weights ${freeze} \
+    --mae_layer_decay ${LLRD} \
+    --reinit_n_layers ${REINIT} \
+    --return_mae_optimizer_groups \
+    --weight_decay ${wd} \
+    --output_dir ${OUT_DIR} \
+    --dataset_mean "[0.3464, 0.2280, 0.2228]" \
+    --dataset_std "[0.2520, 0.2128, 0.2093]" \
+    --use_wandb \
+    --wandb_project_name "EndoViT_Finetuning_ActionTripletDetection" \
+    --wandb_tags FullDataset ViT_Backbone EndoViT \
+    --seed ${SEED} \
+    --num_workers 12 \
+    --loss_weighting "no_weighting"
+
+done

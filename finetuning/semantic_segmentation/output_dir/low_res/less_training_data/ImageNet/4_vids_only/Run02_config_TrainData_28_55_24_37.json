@@ -1,0 +1,95 @@
+{
+    "Project Setup": {
+        "project_name": "EndoViT_Finetuning_Segmentation",
+        "run_name": "LowRes_4VidsOnly_ImageNet_Run02_TrainData_28_55_24_37",
+        "output_dir": "./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/ImageNet/4_vids_only",
+        "log_dir": "logs",
+        "checkpoint_format": "best_ckpt_{metric}_{epoch}",
+        "log_file": "log.txt"
+    },
+
+    "Loggers": {
+        "log_every_n_steps": 1,
+        "WandB": {
+            "enable": true,
+            "tags": ["LowRes, LessData, 4VidsOnly, ImageNet"]
+        }
+    },
+
+    "General Hyperparams": {
+        "device": "cuda",
+        "seed": 1665,
+        "epochs": 10,
+        "batch_size": 64,
+        "num_workers": 10,
+        "performance_optimizations": true, 
+        "resume_training": "",
+        "load_checkpoint": "",
+        "loss": "CrossEntropy",
+        "metrics": "IoU+Dice+PerPixelAcc",
+        "ignore_index": 8,
+        "optimizer": "AdamW",
+        "base_lr": 5e-4,
+        "base_wd": 0,
+        "scheduler": "cosine",
+        "warmup_epochs": 2,
+        "min_lr": 1e-6
+    },
+
+    "Model": {
+        "DPT Hyperparams": {
+            "num_classes"   : 9,
+            "backbone"      : "mae_vitb16_224",
+            "readout"       : "project",
+            "features"      : 256,
+            "use_bn"        : true
+        },
+
+        "MAE Hyperparams": {
+            "mae_model"                     : "vit_base_patch16",
+            "nb_classes"                    : 9,
+            "drop_path"                     : 0.1,
+            "pool_type"                     : "cls_token",
+            "mae_ckpt"                      : "./pretraining/mae/ImageNet_pretrained_models/mae_pretrain_vit_base.pth",
+            "freeze_weights"                : -1,
+            "reinit_n_layers"               : -1,
+            "return_mae_optimizer_groups"   : true,
+            "mae_weight_decay"              : 0.0,
+            "mae_layer_decay"               : 0.65
+        }
+    },
+
+    "Dataset": {
+        "Initialization": {
+            "dataset_dir": "./datasets/CholecSeg8k/data_preprocessed",
+            "RP_file": "./datasets/CholecSeg8k/data_preprocessed/RP_CholecSeg8k.csv"
+        },
+
+        "Splits": {
+            "train_videos": [1, 9, 18, 20, 24, 25, 26, 28, 35, 37, 43, 48, 55],
+            "val_videos": [17, 52],
+            "test_videos": [12, 27]
+        },
+
+        "Transformations": {
+            "train": ["RandomResizedCrop", "RandomHorizontalFlip", "ToTensor", "Normalize"],
+            "val": ["Resize", "ToTensor", "Normalize"],
+            "test": ["Resize", "ToTensor", "Normalize"],
+            "img_size": 224,
+            "RandomResizedCrop_scale": [0.6, 1.0],
+            "flip_probability": 0.5,
+            "dataset_mean": [0.3464, 0.2280, 0.2228],
+            "dataset_std": [0.2520, 0.2128, 0.2093]
+        },
+
+        "Overfitting": {
+            "enabled": false,
+            "num_images": 1000
+        },
+
+        "Data Efficient Training": {
+            "enabled": true,
+            "train_videos": [28, 55, 24, 37]
+        }
+    }
+}

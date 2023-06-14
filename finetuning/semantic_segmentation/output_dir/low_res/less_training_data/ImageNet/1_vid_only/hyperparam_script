@@ -1,0 +1,21 @@
+#!/bin/sh
+#SBATCH --job-name=finetuning_Segmentation_LowRes_1VidOnly_ImageNet
+#SBATCH --output=./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/ImageNet/1_vid_only/out.txt # Standard output of the script (Can be absolute or relative path). %A adds the job id to the file name so you can launch the same script multiple times and get different logging files
+#SBATCH --error=./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/ImageNet/1_vid_only/err.txt # Standard error of the script
+#SBATCH --time=0-96:00:00 # Limit on the total run time (format: days-hours:minutes:seconds)
+#SBATCH --gres=gpu:1 # Number of GPUs if needed
+#SBATCH --cpus-per-task=12 # Number of CPUs (Don't use more than 24 per GPU)
+#SBATCH --mem=120G # Memory in GB (Don't use more than 126G per GPU)
+
+# activate corresponding environment
+source ~/miniconda3/etc/profile.d/conda.sh
+conda deactivate
+conda activate endovit
+
+# run the program
+INDIR="./finetuning/semantic_segmentation/output_dir/low_res/less_training_data/ImageNet/1_vid_only"
+
+for CONFIG in "Run01_config_TrainData_09.json" "Run02_config_TrainData_28.json" "Run03_config_TrainData_43.json"
+do
+    python main.py -c $INDIR/$CONFIG
+done
