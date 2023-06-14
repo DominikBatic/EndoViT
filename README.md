@@ -53,7 +53,7 @@ The fact Vision Transformers can be pre-trained using raw data only prompted us 
 Using Endo700k we pre-train a Vision Transformer model following [Masked Autoencoder (MAE)](https://github.com/facebookresearch/mae) approach. An input image is divided into equally-sized patches and a large proportion of them (75%) is masked out. The transformer is then tasked with reconstructing the missing input. Although a simple concept, it represents a challenging self-supervised tasked which induces a comprehensive understanding of observed objects and scenes. Afterwards, the pre-trained ViT model can be fine-tuned as a feature extraction backbone on various downstream tasks. We visualize the pre-training and fine-tuning procedure in the following image.
 
 <p align="center">
-  <img src="assets/EndoViT.png" alt="EndoViT_model" width="65%">
+  <img src="assets/EndoViT.png" alt="EndoViT_model" width="85%">
 </p>
 
 Finally, we evaluated the EndoViT's performance on three downstream tasks:
