@@ -237,6 +237,20 @@ source ./finetuning/semantic_segmentation/output_dir/high_res/full_dataset/NoPre
 
 </div>
 
+#### Qualitative Full Dataset Results:
+
+Compared to the ImageNet pre-trained model EndoViT has more globally consistent outputs (highlighted in black). Furthermore, it is significantly better at reconstructing instruments' tips (highlighted in red).
+
+<p align="center">
+  <img src="assets/qualitative_results_segmentation_img1.png" alt="SegResultsImg1" width="85%">
+</p>
+
+Compared to the results introduced in the following [benchmark](https://ieeexplore.ieee.org/document/9871583), EndoViT outperforms other Transformer architectures (UNETR) as well as various CNN architectures (including the best performing U-Net++).
+
+<p align="center">
+  <img src="assets/qualitative_results_segmentation_img2.png" alt="SegResultsImg1" width="85%">
+</p>
+
 **12) Few-shot Learning Experiments**
 - Few-shot experiments are always performed by training on a fixed number of training videos. In the case of CholecSeg8k dataset, on 1, 2 or 4 out of in total 13 training videos.
 - Each script will perform 3 runs on different video subsets. We always use the same fixed video subsets: [Few-shot Learning Subsets](./finetuning/semantic_segmentation/output_dir/LessTrainingData.txt)
