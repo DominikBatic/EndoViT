@@ -239,16 +239,16 @@ source ./finetuning/semantic_segmentation/output_dir/high_res/full_dataset/NoPre
 
 #### Qualitative Full Dataset Results:
 
-Compared to the ImageNet pre-trained model EndoViT has more globally consistent outputs (highlighted in black). Furthermore, it is significantly better at reconstructing instruments' tips (highlighted in red).
+Compared to the ImageNet pre-trained model, EndoViT has more globally consistent outputs (highlighted in black). Furthermore, it is significantly better at reconstructing instruments' tips (highlighted in red).
 
 <p align="center">
   <img src="assets/qualitative_results_segmentation_img1.png" alt="SegResultsImg1" width="85%">
 </p>
 
-Compared to the results introduced in the following [benchmark](https://ieeexplore.ieee.org/document/9871583), EndoViT outperforms other Transformer architectures (UNETR) as well as various CNN architectures (including the best performing U-Net++).
+Compared to the results introduced in the following [benchmark](https://ieeexplore.ieee.org/document/9871583), EndoViT outperforms other Transformers (UNETR) as well as various CNN architectures (including the best performing U-Net++).
 
 <p align="center">
-  <img src="assets/qualitative_results_segmentation_img2.png" alt="SegResultsImg1" width="85%">
+  <img src="assets/qualitative_results_segmentation_img2.png" alt="SegResultsImg1" width="100%">
 </p>
 
 **12) Few-shot Learning Experiments**
