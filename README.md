@@ -16,6 +16,15 @@ Official codebase of the paper: [Whether and When does Endoscopy Domain Pretrain
 }
 ```
 
+
+## Pretrained EndoViT Checkpoints
+| Version | Checkpoint |
+|----------|----------|
+| Segmentation | [EndoViT_Seg](https://drive.google.com/file/d/1NJ-4ZL40kHA_WZ1NylahaS84FcvnigjF/view?usp=share_link)
+| Action Triplet Detection | [EndoViT ATD](https://drive.google.com/file/d/1NReHXlMiBkVJiZcuJAGx6sGWh7pNgg_i/view?usp=share_link)
+| Surgical Phase Recognition | [EndoViT_SPR](https://drive.google.com/file/d/1NK8aMb9SaApCn_vLigyDSn3aTI55QVT1/view?usp=share_link)
+
+
 ## Introduction
 The development of novel Computer Vision (CV) methods in the medical field has been largely constrained by the lack of publicly available annotated data. Patient data and recorded surgical procedures are hard to obtain. They are considered highly sensitive information and therefore protected by numerous laws. Even the annotation procedure is complicated, often requiring the involvement of multiple medical experts.
 
