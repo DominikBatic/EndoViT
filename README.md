@@ -17,12 +17,14 @@ Official codebase of the paper: [Whether and When does Endoscopy Domain Pretrain
 ```
 
 
-## Pretrained EndoViT Checkpoints
+## Pre-trained EndoViT Checkpoints
 | Version | Checkpoint |
 |----------|----------|
 | Segmentation | [EndoViT_Seg](https://drive.google.com/file/d/1NJ-4ZL40kHA_WZ1NylahaS84FcvnigjF/view?usp=share_link)
 | Action Triplet Detection | [EndoViT ATD](https://drive.google.com/file/d/1NReHXlMiBkVJiZcuJAGx6sGWh7pNgg_i/view?usp=share_link)
 | Surgical Phase Recognition | [EndoViT_SPR](https://drive.google.com/file/d/1NK8aMb9SaApCn_vLigyDSn3aTI55QVT1/view?usp=share_link)
+
+Use these checkpoints if you wish to skip EndoViT's pre-training.
 
 
 ## Introduction
@@ -159,11 +161,12 @@ source ./pretraining/pretrained_endovit_models/EndoViT_for_SurgicalPhaseRecognit
 - Best checkpoint will be saved at: ```./pretraining/pretrained_endovit_models/EndoViT_for_SurgicalPhaseRecognition/endovit_SPR.pth```
 
 -------------------
-### Pretrained Checkpoints:
+### Pre-trained Checkpoints:
 -------------------
 
-- In case you wish to skip the pretraining, you can download our checkpoints [here](#pretrained-endovit-checkpoints).
-- Simply place the checkpoints where the best pretraining checkpoints would have been saved in the section ```7) Run the pre-training```.
+- In case you wish to skip the pre-training, you can download our checkpoints [here](#pre-trained-endovit-checkpoints).
+- Simply place the checkpoints where the best pretraining checkpoints would have been saved in the section <br>```7) Run the pre-training```.
+- **Note:** In this case, you should still perform step ```6) Download ImageNet Pre-trained Weights```.
 
 -------------------
 ### Fine-tune EndoViT:
