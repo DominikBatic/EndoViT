@@ -159,6 +159,13 @@ source ./pretraining/pretrained_endovit_models/EndoViT_for_SurgicalPhaseRecognit
 - Best checkpoint will be saved at: ```./pretraining/pretrained_endovit_models/EndoViT_for_SurgicalPhaseRecognition/endovit_SPR.pth```
 
 -------------------
+### Pretrained Checkpoints:
+-------------------
+
+- In case you wish to skip the pretraining, you can download our checkpoints [here](#pretrained-endovit-checkpoints).
+- Simply place the checkpoints where the best pretraining checkpoints would have been saved in the section ```7) Run the pre-training```.
+
+-------------------
 ### Fine-tune EndoViT:
 -------------------
 - As noted earlier, we fine-tune EndoViT on three downstream tasks: Semantic Segmentation, Action Triplet Detection and Surgical Phase Recognition.
