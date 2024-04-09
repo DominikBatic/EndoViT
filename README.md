@@ -3,7 +3,9 @@ Large-scale Self-supervised Pre-training of [Vision Transformers (ViT)](https://
 
 -------------------
 
-Official codebase of the paper: [Whether and When does Endoscopy Domain Pretraining Make Sense?](https://arxiv.org/abs/2303.17636)
+Official codebase of the paper: [EndoViT: pretraining vision transformers on a large collection of endoscopic images](https://link.springer.com/article/10.1007/s11548-024-03091-5?utm_source=rct_congratemailt&utm_medium=email&utm_campaign=oa_20240403&utm_content=10.1007/s11548-024-03091-5)
+
+Earlier arXiv version (without semantic-segmentation) can be found here: [Whether and When does Endoscopy Domain Pretraining Make Sense?](https://arxiv.org/abs/2303.17636)
 
 **Authors:** Dominik Batić, Felix Holm, Ege Özsoy, Tobias Czempiel, Nassir Navab
 
