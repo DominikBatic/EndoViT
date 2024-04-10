@@ -18,7 +18,7 @@ Earlier arXiv version (without semantic-segmentation) can be found here: [Whethe
 }
 ```
 
-## Quick-Start:
+## Quick-Start
 
 Checkout out our 🤗 <a href="https://huggingface.co/egeozsoy/EndoViT" target="_blank">Hugging Face</a> page for a guide on using EndoViT as Feature Extractor (Either Frozen or as a Backbone to be
 Fine-tuned).
