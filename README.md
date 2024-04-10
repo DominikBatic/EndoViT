@@ -18,13 +18,19 @@ Earlier arXiv version (without semantic-segmentation) can be found here: [Whethe
 }
 ```
 
+## Quick-Start:
+
+Checkout out our 🤗 <a href="https://huggingface.co/egeozsoy/EndoViT" target="_blank">Hugging Face</a> page for a guide on using EndoViT as Feature Extractor (Either Frozen or as a Backbone to be
+Fine-tuned).
+Alternatively you can take a look at the ```endovit_demo.py```
 
 ## Pre-trained EndoViT Checkpoints
-| Version | Checkpoint |
-|----------|----------|
-| Segmentation | [EndoViT_Seg](https://drive.google.com/file/d/1NJ-4ZL40kHA_WZ1NylahaS84FcvnigjF/view?usp=share_link)
-| Action Triplet Detection | [EndoViT ATD](https://drive.google.com/file/d/1NReHXlMiBkVJiZcuJAGx6sGWh7pNgg_i/view?usp=share_link)
-| Surgical Phase Recognition | [EndoViT_SPR](https://drive.google.com/file/d/1NK8aMb9SaApCn_vLigyDSn3aTI55QVT1/view?usp=share_link)
+
+| Version                    | Checkpoint                                                                                           |
+|----------------------------|------------------------------------------------------------------------------------------------------|
+| Segmentation               | [EndoViT_Seg](https://drive.google.com/file/d/1NJ-4ZL40kHA_WZ1NylahaS84FcvnigjF/view?usp=share_link) 
+| Action Triplet Detection   | [EndoViT ATD](https://drive.google.com/file/d/1NReHXlMiBkVJiZcuJAGx6sGWh7pNgg_i/view?usp=share_link) 
+| Surgical Phase Recognition | [EndoViT_SPR](https://drive.google.com/file/d/1NK8aMb9SaApCn_vLigyDSn3aTI55QVT1/view?usp=share_link) 
 
 Use these checkpoints if you wish to skip EndoViT's pre-training.
 
