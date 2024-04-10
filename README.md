@@ -26,11 +26,13 @@ Alternatively you can take a look at the ```endovit_demo.py```
 
 ## Pre-trained EndoViT Checkpoints
 
-| Version                    | Checkpoint                                                                                           |
-|----------------------------|------------------------------------------------------------------------------------------------------|
-| Segmentation               | [EndoViT_Seg](https://drive.google.com/file/d/1NJ-4ZL40kHA_WZ1NylahaS84FcvnigjF/view?usp=share_link) 
-| Action Triplet Detection   | [EndoViT ATD](https://drive.google.com/file/d/1NReHXlMiBkVJiZcuJAGx6sGWh7pNgg_i/view?usp=share_link) 
-| Surgical Phase Recognition | [EndoViT_SPR](https://drive.google.com/file/d/1NK8aMb9SaApCn_vLigyDSn3aTI55QVT1/view?usp=share_link) 
+To prevent data leakage for our evaluation, we excluded the test set for backbone training of our segmentation, action triplet recognition, and surgical phase recognition tasks, respectively. You can find the weights for each of these versions of the backbone below.
+
+| Excluded Data (Test Sets)                  | Checkpoint                                                                                           |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------|
+| CholecSeg8k (Segmentation)                 | [EndoViT_Seg](https://drive.google.com/file/d/1NJ-4ZL40kHA_WZ1NylahaS84FcvnigjF/view?usp=share_link) 
+| CholecT45 (Action Triplet Detection)       | [EndoViT ATD](https://drive.google.com/file/d/1NReHXlMiBkVJiZcuJAGx6sGWh7pNgg_i/view?usp=share_link) 
+| Cholec80 (Surgical Phase Recognition)      | [EndoViT_SPR](https://drive.google.com/file/d/1NK8aMb9SaApCn_vLigyDSn3aTI55QVT1/view?usp=share_link) 
 
 Use these checkpoints if you wish to skip EndoViT's pre-training.
 
