@@ -47,7 +47,7 @@ images = torch.stack([process_single_image(image_path) for image_path in image_p
 
 device = "cuda"
 dtype = torch.float16
-model, loading_info = load_model_from_huggingface("egeozsoy/EndoViT", "endovit.pth")
+model, loading_info = load_model_from_huggingface("egeozsoy/EndoViT", "pytorch_model.bin")
 model = model.to(device, dtype)
 print(loading_info)
 output = model.forward_features(images.to(device, dtype))
