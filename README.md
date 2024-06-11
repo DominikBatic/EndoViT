@@ -103,7 +103,7 @@ conda activate endovit
 -------------------
 - **NOTE: By downloading any of the datasets you agree to the terms of their use. Please check the corresponding LICENCEs.**
 
-**3) Download Cholec80 ([GitHub](https://github.com/CAMMA-public/TF-Cholec80)) ([LICENSE](https://github.com/CAMMA-public/TF-Cholec80/blob/master/LICENSE))**
+**3) Download Cholec80 ([GitHub](https://github.com/CAMMA-public/TF-Cholec80)) ([LICENSE](https://github.com/CAMMA-public/TF-Cholec80/blob/master/LICENSE)) ([Request Form](https://docs.google.com/forms/d/1GwZFM3-GhEduBs1d5QzbfFksKmS1OqXZAz8keYi-wKI))**
 - We use a slightly modified download script from the original repository ("prepare.py").
 ```
 python ./datasets/Cholec80/download_cholec80.py --data_rootdir ./datasets/
